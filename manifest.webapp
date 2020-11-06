@@ -1,0 +1,27 @@
+{
+	"version": "1.1.0",
+	"name": "Flashcards",
+	"subtitle": "Memorize and learn by the way you want!",
+	"description": "",
+	"categories": ["utilites"],
+	"type": "privileged",
+	"launch_path": "/index.html",
+	"cursor": false,
+	"icons": {
+		"60": "/flashcards_56.png",
+		"128": "/flashcards_112.png"
+	},
+	"developer": {
+		"name": "Jan Michalak",
+		"url": "https://canicjusz.github.io"
+	},
+	"locales": {
+		"en-US": {
+			"name": "Flashcards",
+			"subtitle": "Memorize and learn by the way you want!",
+			"description": ""
+		}
+	},
+	"default_locale": "en-US",
+	"origin": "app://flashcards/manifest.webapp"
+}
