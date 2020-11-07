@@ -11,7 +11,6 @@ function handleKeydown(e){
             e.preventDefault()
             center(element, classes)
             break;
-        case 'a':
         case 'SoftLeft':
             e.preventDefault()
             left(element, classes)
@@ -22,7 +21,6 @@ function handleKeydown(e){
             commit('setSoftkeys', classes)
             break;
         case 'SoftRight':
-        case 'd':
             e.preventDefault()
             right(element, classes)
             break;
