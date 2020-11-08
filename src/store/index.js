@@ -24,6 +24,9 @@ export default createStore({
     softkeys: {left: '', center: 'SELECT', right: ''}
   },
   mutations: {
+    setActiveSection(state, value){
+      state.activeSection = value
+    },
     changeError(state, value){
       state.error = value
     },
@@ -36,13 +39,16 @@ export default createStore({
     changeFeedbackVisibility(state, bool){
       state.showFeedback = bool
     },
+    setDecks(state, arr){
+      state.decks = arr
+    },
     addDeck(state, object){
       state.decks.push(object)
     },
     changeCurrentDeck(state, name){
       state.currentDeck = name
     },
-    updateFlashcards(state, arr){
+    setFlashcards(state, arr){
       state.flashcards = arr
     },
     changeCurrentFlashcard(state, names){
@@ -107,7 +113,7 @@ export default createStore({
     changeSection({state,commit}, value){
       document.querySelector('#'+state.activeSection).classList.remove('section--active')
       naviboard.destroyNavigation(state.activeSection)
-      state.activeSection = value
+      commit('setActiveSection', value)
       document.querySelector('#'+value).classList.add('section--active')
       naviboard.setNavigation(value)
       let timeout = setInterval(()=>{
@@ -119,11 +125,11 @@ export default createStore({
       }, 10)
     },
     updateDecks({state,commit}, value){
-      state.decks = value
+      commit('setDecks', value)
       if(state.activeSection !== 'decks'){
         document.querySelector('#'+state.activeSection).classList.remove('section--active')
         naviboard.destroyNavigation(state.activeSection)
-        state.activeSection = 'decks'
+        commit('setActiveSection', value)
       }
       document.querySelector('#decks').classList.add('section--active')
       naviboard.setNavigation('decks')
@@ -174,7 +180,7 @@ export default createStore({
       .catch(()=>dispatch('openError', "Couldn't remove the deck, reach me at: janmichalak@int.pl"))
     },
     loadFlashcards({commit, state, dispatch}){
-      db.decks.get(state.currentDeck, res=>commit('updateFlashcards', res.flashcards))
+      db.decks.get(state.currentDeck, res=>commit('setFlaschards', res.flashcards))
       .then(()=>dispatch('changeSection', 'flashcards'))
       .then(()=>dispatch('openFeedback', `Flashcards loaded`))
       .catch(()=>dispatch('openError', "Couldn't load flashcards, reach me at: janmichalak@int.pl"))
@@ -212,7 +218,7 @@ export default createStore({
             flashcard.freezed = freezed
             flashcard.front = front
             flashcard.back = back
-            commit('updateFlashcards', flashcards)
+            commit('setFlaschards', flashcards)
           }else{
             throw 'dont duplicate'
           }
@@ -232,7 +238,7 @@ export default createStore({
           const currentBack = state.currentFlashcard.back
           const index = flashcards.findIndex(flashcard=>flashcard.front===currentFront&&flashcard.back===currentBack)
           flashcards.splice(index, 1)
-          commit('updateFlashcards', flashcards)
+          commit('setFlaschards', flashcards)
         })
         .then(()=>dispatch('changeSection', 'flashcards'))
         .then(()=>dispatch('openFeedback', `Flashcard removed`))
