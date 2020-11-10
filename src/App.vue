@@ -3,16 +3,16 @@
   <div class="top-bar">
     <p class="top-bar__text">{{barText}}</p>
   </div>
-<decks></decks>
-<addDeck></addDeck>
-<editDeck></editDeck>
-<flashcards></flashcards>
-<addFlashcard></addFlashcard>
+  <decks></decks>
+  <addDeck></addDeck>
+  <editDeck></editDeck>
+  <flashcards></flashcards>
+  <addFlashcard></addFlashcard>
   <editFlashcard></editFlashcard>
   <train></train>
   <deckSettings></deckSettings>
-    <errorMessage></errorMessage>
-    <feedbackMessage></feedbackMessage>
+  <errorMessage></errorMessage>
+  <feedbackMessage></feedbackMessage>
   <softkeys></softkeys>
 </template>
 
