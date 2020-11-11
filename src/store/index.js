@@ -45,8 +45,8 @@ const flashcards = {
             dispatch('changeSection', 'train')
           }
         })
-        .then(()=>dispatch('openFeedback', `Flashcards loaded`))
-        .catch(()=>dispatch('openError', "There is no flashcards to learn"))
+        .then(()=>dispatch('feedback/open', `Flashcards loaded`))
+        .catch(()=>dispatch('error/open', "There is no flashcards to learn"))
     },
     processTrainingFlashcard({state, commit, dispatch}, answer){
       let done = false
@@ -74,14 +74,14 @@ const flashcards = {
         })
         .then(()=>done?dispatch('changeSection', 'flashcards'):commit('removeTrainingFlashcards'))
         .then(()=>commit('setSoftkeys'))
-        .then(()=>dispatch('openFeedback', `Next repetition in ${nextDay} days`))
-        .catch(()=>dispatch('openError', "Couldn't process answer, reach me at: janmichalak@int.pl"))
+        .then(()=>dispatch('feedback/open', `Next repetition in ${nextDay} days`))
+        .catch(()=>dispatch('error/open', "Couldn't process answer, email me about the issue: janmichalak@int.pl"))
     },
     loadFlashcards({commit, state, dispatch}){
       db.decks.get(state.currentDeck, res=>commit('setFlashards', res.flashcards))
       .then(()=>dispatch('changeSection', 'flashcards'))
-      .then(()=>dispatch('openFeedback', `Flashcards loaded`))
-      .catch(()=>dispatch('openError', "Couldn't load flashcards, reach me at: janmichalak@int.pl"))
+      .then(()=>dispatch('feedback/open', `Flashcards loaded`))
+      .catch(()=>dispatch('error/open', "Couldn't load flashcards, email me about the issue: janmichalak@int.pl"))
     },
     addFlashcard({state, commit,dispatch}, {front, back, freezed}){
       db.decks.where('name').equals(state.currentDeck)
@@ -96,8 +96,8 @@ const flashcards = {
           }
         })
         .then(()=>dispatch('changeSection', 'flashcards'))
-        .then(()=>dispatch('openFeedback', `Flashcard added`))
-        .catch(()=>dispatch('openError', "There is already a flashcard with such name"))
+        .then(()=>dispatch('feedback/open', `Flashcard added`))
+        .catch(()=>dispatch('error/open', "There is already a flashcard with such name"))
     },
     editFlashcard({state, commit, dispatch}, {front, back, freezed, reset}){
       db.decks.where('name').equals(state.currentDeck)
@@ -122,8 +122,8 @@ const flashcards = {
           }
         })
         .then(()=>dispatch('changeSection', 'flashcards'))
-        .then(()=>dispatch('openFeedback', `Flashcard edited`))
-        .catch(()=>dispatch('openError', "There is already a flashcard with such name"))
+        .then(()=>dispatch('feedback/open', `Flashcard edited`))
+        .catch(()=>dispatch('error/open', "There is already a flashcard with such name"))
     },
     removeFlashcard({state, commit, dispatch}){
       db.decks.where('name').equals(state.currentDeck)
@@ -136,8 +136,8 @@ const flashcards = {
           commit('setFlashards', flashcards)
         })
         .then(()=>dispatch('changeSection', 'flashcards'))
-        .then(()=>dispatch('openFeedback', `Flashcard removed`))
-        .catch(()=>dispatch('openError', "Couldn't remove flashcard, reach me at: janmichalak@int.pl"))
+        .then(()=>dispatch('feedback/open', `Flashcard removed`))
+        .catch(()=>dispatch('error/open', "Couldn't remove flashcard, email me about the issue: janmichalak@int.pl"))
     },
     resetDeckProgress({state, dispatch}){
       db.decks.where('name').equals(state.currentDeck)
@@ -146,15 +146,15 @@ const flashcards = {
           flashcards.forEach(flashcard=>{flashcard.level = 0; flashcard.review = 0})
         })
         .then(()=>dispatch('changeSection', 'decks'))
-        .then(()=>dispatch('openFeedback', `Deck's progress reseted`))
-        .catch(()=>dispatch('openError', "Couldn't reset deck progress, reach me at: janmichalak@int.pl"))
+        .then(()=>dispatch('feedback/open', `Deck's progress reseted`))
+        .catch(()=>dispatch('error/open', "Couldn't reset deck progress, email me about the issue: janmichalak@int.pl"))
     },
 
     removeDecksFlashcards({state, dispatch}){
       db.decks.update(state.currentDeck, {flashcards: []})
         .then(()=>dispatch('changeSection', 'decks'))
-        .then(()=>dispatch('openFeedback', `Deck's flashcards removed`))
-        .catch(()=>dispatch('openError', "Couldn't remove deck's flashcards, reach me at: janmichalak@int.pl"))
+        .then(()=>dispatch('feedback/open', `Deck's flashcards removed`))
+        .catch(()=>dispatch('error/open', "Couldn't remove deck's flashcards, email me about the issue: janmichalak@int.pl"))
     },
   }
 }
@@ -193,75 +193,31 @@ const decks = {
         }
       }, 10)
     },
-    openError({ commit, state }, value){
-      clearInterval(state.errorTimeout)
-      commit('changeError', value)
-      commit('changeErrorVisibility', true)
-      state.errorTimeout = setTimeout(()=>commit('changeErrorVisibility', false), 2500)
-    },
-    openFeedback({ commit, state }, value){
-      clearInterval(state.feedbackTimeout)
-      commit('changeFeedback', value)
-      commit('changeFeedbackVisibility', true)
-      state.feedbackTimeout = setTimeout(()=>commit('changeFeedbackVisibility', false), 2500)
-    },
     loadDecks({dispatch}){
       db.decks.toArray()
         .then(res =>dispatch('updateDecks', res))
-        .then(()=>dispatch('openFeedback', `Decks loaded`))
-        .catch(()=>dispatch('openError', "Couldn't load decks, reach me at: janmichalak@int.pl"))
+        .then(()=>dispatch('feedback/open', `Decks loaded`))
+        .catch(()=>dispatch('error/open', "Couldn't load decks, email me about the issue: janmichalak@int.pl"))
     },
     addDeck({commit, dispatch}, name){
       const obj = {name, flashcards: []}
       db.decks.add(obj)
         .then(()=>commit('addDeck', obj))
         .then(()=>dispatch('changeSection', 'decks'))
-        .then(()=>dispatch('openFeedback', `Deck added`))
-        .catch(()=>dispatch('openError', "There is already a deck with such name"))
+        .then(()=>dispatch('feedback/open', `Deck added`))
+        .catch(()=>dispatch('error/open', "There is already a deck with such name"))
     },
     editDeck({state, dispatch}, name){
       db.decks.update(state.currentDeck, {name})
         .then(()=>dispatch('loadDecks'))
-        .then(()=>dispatch('openFeedback', `Deck edited`))
-        .catch(()=>dispatch('openError', "There is already a deck with such name"))
+        .then(()=>dispatch('feedback/open', `Deck edited`))
+        .catch(()=>dispatch('error/open', "There is already a deck with such name"))
     },
     removeDeck({state, dispatch}){
       db.decks.delete(state.currentDeck)
       .then(()=>dispatch('loadDecks'))
-      .then(()=>dispatch('openFeedback', `Deck removed`))
-      .catch(()=>dispatch('openError', "Couldn't remove the deck, reach me at: janmichalak@int.pl"))
-    },
-  }
-}
-
-const feedback = {
-  state: {
-    feedbackTimeout: undefined,
-    feedback: '',
-    showFeedback: false,
-  },
-  mutations: {
-    changeFeedback(state, value){
-      state.feedback = value
-    },
-    changeFeedbackVisibility(state, bool){
-      state.showFeedback = bool
-    },
-  }
-}
-
-const error = {
-  state: {
-    errorTimeout: undefined,
-    error: '',
-    showError: false,
-  },
-  mutations: {
-    changeError(state, value){
-      state.error = value
-    },
-    changeErrorVisibility(state, bool){
-      state.showError = bool
+      .then(()=>dispatch('feedback/open', `Deck removed`))
+      .catch(()=>dispatch('error/open', "Couldn't remove the deck, email me about the issue: janmichalak@int.pl"))
     },
   }
 }
@@ -343,20 +299,43 @@ const sections = {
   }
 }
 
+function alert(){
+  return {
+    namespaced: true,
+    state: {
+      timeout: undefined,
+      message: '',
+      show: false,
+    },
+    mutations: {
+      changeMessage(state, value){
+        state.message = value
+      },
+      changeVisibility(state, bool){
+        state.show = bool
+      },
+    },
+    actions: {
+      open({ commit, state }, value){
+        clearInterval(state.timeout)
+        commit('changeMessage', value)
+        commit('changeVisibility', true)
+        state.timeout = setTimeout(()=>commit('changeVisibility', false), 2500)
+      },
+    }
+  }
+}
+
 export default createStore({
   state: {
     ...flashcards.state,
     ...decks.state,
-    ...feedback.state,
-    ...error.state,
     ...softkeys.state,
     ...sections.state,
   },
   mutations: {
     ...flashcards.mutations,
     ...decks.mutations,
-    ...feedback.mutations,
-    ...error.mutations,
     ...softkeys.mutations,
     ...sections.mutations,
   },
@@ -364,5 +343,10 @@ export default createStore({
     ...flashcards.actions,
     ...decks.actions,
     ...sections.actions,
+  },
+  modules: {
+    //get "copy" of an object
+    feedback: alert(),
+    error: alert()
   }
 })

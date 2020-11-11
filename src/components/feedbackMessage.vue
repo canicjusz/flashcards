@@ -1,13 +1,13 @@
 <template>
-  <div :class="['feedback', {'feedback--on': showFeedback}]">
-    <p class="feedback__message">{{feedback}}</p>
+  <div :class="['feedback', {'feedback--on': show}]">
+    <p class="feedback__message">{{message}}</p>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 export default {
-  computed: mapState(['showFeedback', 'feedback'])
+  computed: mapState({show: state=>state.feedback.show, message: state=>state.feedback.message})
 }
 </script>
 

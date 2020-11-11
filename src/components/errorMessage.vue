@@ -1,13 +1,13 @@
 <template>
-  <div :class="['error', {'error--on': showError}]">
-    <p class="error__message">{{error}}</p>
+  <div :class="['error', {'error--on': show}]">
+    <p class="error__message">{{message}}</p>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 export default {
-  computed: mapState(['showError', 'error'])
+  computed: mapState({show: state=>state.error.show, message: state=>state.error.message})
 }
 </script>
 
