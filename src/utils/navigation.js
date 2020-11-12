@@ -17,8 +17,12 @@ function handleKeydown(e){
             break;
         case 'ArrowDown':
         case 'ArrowUp':
-            section.scrollTop += element.getBoundingClientRect().top - 88
-            commit('setSoftkeys', classes)
+            if (RegExp(section.id, 'i').test(classes)) {
+                section.scrollTop += element.getBoundingClientRect().top - 88
+                commit('setSoftkeys', classes)
+            } else {
+                dispatch('changeSection', section.id)
+            }
             break;
         case 'SoftRight':
             e.preventDefault()
