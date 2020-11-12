@@ -63,7 +63,6 @@ html, body
     overflow: hidden
     position: relative
     width: 100vw
-    //change it later to 8.8
     height: calc(100% - 5.8rem)
     display: none
 
@@ -267,27 +266,12 @@ html, body
         text-align: end
 
 .error
-    color: $font-white
-    font-size: 1.4rem
-    display: flex
-    justify-content: center
-    align-items: center
-    text-align: center
-    transform: translateY(20px)
-    height: 50px
-    width: 100vw
     background: $bad-red
-    bottom: 0
-    transition: transform 0.5s ease-in-out
-    position: absolute
-
-    &--on
-        transform: translateY(-30px)
-
-    &__message
-        margin: 0
 
 .feedback
+    background: $good-green
+
+.alert
     color: $font-white
     font-size: 1.4rem
     display: flex
@@ -297,12 +281,11 @@ html, body
     transform: translateY(20px)
     height: 50px
     width: 100vw
-    background: $good-green
     bottom: 0
     transition: transform 0.5s ease-in-out
     position: absolute
 
-    &--on
+    &--show
         transform: translateY(-30px)
 
     &__message

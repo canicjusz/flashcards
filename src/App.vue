@@ -11,15 +11,14 @@
   <editFlashcard></editFlashcard>
   <train></train>
   <deckSettings></deckSettings>
-  <errorMessage></errorMessage>
-  <feedbackMessage></feedbackMessage>
+  <alert :type="'error'"></alert>
+  <alert :type="'feedback'"></alert>
   <softkeys></softkeys>
 </template>
 
 <script>
 import softkeys from "./components/softkeys.vue";
-import errorMessage from "./components/errorMessage.vue";
-import feedbackMessage from "./components/feedbackMessage.vue";
+import alert from "./components/alert.vue";
 import decks from "./sections/decks.vue";
 import addDeck from "./sections/addDeck.vue";
 import editDeck from "./sections/editDeck.vue";
@@ -34,7 +33,6 @@ export default {
   name: 'App',
   components: {
     softkeys,
-    errorMessage,
     decks,
     addDeck,
     flashcards,
@@ -43,7 +41,7 @@ export default {
     train,
     deckSettings,
     editFlashcard,
-    feedbackMessage
+    alert
   },
   created(){
     this.loadDecks()
